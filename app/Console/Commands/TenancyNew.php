@@ -3,12 +3,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-
 use Hyn\Tenancy\Models\Website;
 use Hyn\Tenancy\Contracts\Repositories\WebsiteRepository;
-
 use Hyn\Tenancy\Models\Hostname;
 use Hyn\Tenancy\Contracts\Repositories\HostnameRepository;
+use Hyn\Tenancy\Environment;
 
 class TenancyNew extends Command
 {
@@ -53,5 +52,18 @@ class TenancyNew extends Command
         $hostname = app(HostnameRepository::class)->create($hostname);
         app(HostnameRepository::class)->attach($hostname, $website);
         $this->info('Hostname criado com sucesso. http://' . $nameHostname . '.tenancy.test');
+
+        $tenancy = app(Environment::class);
+
+        $tenancy->hostname($hostname);
+
+        $tenancy->hostname(); // resolves $hostname as currently active hostname
+
+        $tenancy->tenant($website); // switches the tenant and reconfigures the app
+
+        $tenancy->website(); // resolves $website
+        $tenancy->tenant(); // resolves $website
+
+        $tenancy->identifyHostname(); // resets resolving $hostname by using the Request
     }
 }

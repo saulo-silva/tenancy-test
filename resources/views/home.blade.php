@@ -14,7 +14,22 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    <table class="table">
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                        @foreach($users as $user)
+                        <tr>
+                            <td>{{$user->name}}</td>
+                            <td>{{$user->email}}</td>
+                            <td>
+                                <a href="{{route('user.destroy', $user->id)}}" class="btn btn-danger">remover</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
                 </div>
             </div>
         </div>
